@@ -43,23 +43,16 @@ class SingleLinkedList {
  
         BasicIterator& operator=(const BasicIterator& rhs) = default;
  
-    
-        [[nodiscard]] bool operator==(const BasicIterator<const Type>& rhs) const noexcept {
+    template <class OtherType>
+        [[nodiscard]] bool operator==(const BasicIterator<OtherType>& rhs) const noexcept {
             return (node_ == rhs.node_);
         }
        
-        [[nodiscard]] bool operator!=(const BasicIterator<const Type>& rhs) const noexcept {
+    template <class OtherType>
+        [[nodiscard]] bool operator!=(const BasicIterator<OtherType>& rhs) const noexcept {
             return !(*this == rhs);
         }
       
-        [[nodiscard]] bool operator==(const BasicIterator<Type>& rhs) const noexcept {
-            return (node_ == rhs.node_);
-        }
- 
-        [[nodiscard]] bool operator!=(const BasicIterator<Type>& rhs) const noexcept {
-            return !(*this == rhs);
-        }
- 
         BasicIterator& operator++() {
            if(node_){ 
 			node_ = node_->next_node;
