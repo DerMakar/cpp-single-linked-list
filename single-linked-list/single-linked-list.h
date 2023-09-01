@@ -11,37 +11,37 @@ using namespace std;
  
 template <typename Type>
 class SingleLinkedList {
-    struct Node {
-        Node() = default;
-        Node(const Type& val, Node* next)
-            : value(val)
-            , next_node(next) {
-        }
-        Type value;
-        Node* next_node = nullptr;
-    };
+struct Node {
+    Node() = default;
+    Node(const Type& val, Node* next)
+        : value(val)
+        , next_node(next) {
+    }
+    Type value;
+    Node* next_node = nullptr;
+};
  
-   template <typename ValueType>
-    class BasicIterator {
-        friend class SingleLinkedList;
-        explicit BasicIterator(Node* node) {
-            node_ = node;
-        }
+template <typename ValueType>
+class BasicIterator {
+    friend class SingleLinkedList;
+    explicit BasicIterator(Node* node) {
+        node_ = node;
+    }
  
-    public:
-        using iterator_category = std::forward_iterator_tag;
-        using value_type = Type;
-        using difference_type = std::ptrdiff_t;
-        using pointer = ValueType*;
-        using reference = ValueType&;
+public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = Type;
+    using difference_type = std::ptrdiff_t;
+    using pointer = ValueType*;
+    using reference = ValueType&;
  
-        BasicIterator() = default;
+    BasicIterator() = default;
  
-        BasicIterator(const BasicIterator<Type>& other) noexcept {
-            node_ = other.node_;
-        }
+    BasicIterator(const BasicIterator<Type>& other) noexcept {
+        node_ = other.node_;
+    }
  
-        BasicIterator& operator=(const BasicIterator& rhs) = default;
+    BasicIterator& operator=(const BasicIterator& rhs) = default;
  
     template <class OtherType>
         [[nodiscard]] bool operator==(const BasicIterator<OtherType>& rhs) const noexcept {
@@ -53,44 +53,44 @@ class SingleLinkedList {
             return !(*this == rhs);
         }
       
-        BasicIterator& operator++() {
-           if(node_){ 
-			node_ = node_->next_node;
+    BasicIterator& operator++() {
+        if(node_){ 
+	        node_ = node_->next_node;
             return *this;
-            }else{
+        }else{
             assert(false);
-            }
         }
+    }
  
-        BasicIterator operator++(int)  {
-			if(node_){            
-				auto i = *this;
-            	++(*this);
-            	return i;
-			}else{
+    BasicIterator operator++(int)  {
+	    if(node_){            
+		    auto i = *this;
+            ++(*this);
+            return i;
+	    }else{
             throw std::logic_error("log"s);
-            }
         }
+    }
  
-        [[nodiscard]] reference operator*() const  {
-			if(node_){            
-			return node_->value;
-            }else{
-			throw std::logic_error("log"s);
-            }
+    [[nodiscard]] reference operator*() const  {
+	    if(node_){            
+	        return node_->value;
+        }else{
+	        throw std::logic_error("log"s);
         }
+    }
  
-        [[nodiscard]] pointer operator->() const noexcept {
-           if(node_){
-           return &node_->value;
-           }else{
-           assert(false);
-           }
+    [[nodiscard]] pointer operator->() const noexcept {
+        if(node_){
+          return &node_->value;
+        }else{
+            assert(false);
         }
+    }
  
-    private:
-        Node* node_ = nullptr;
-    };
+private:
+    Node* node_ = nullptr;
+};
  
 public:
     SingleLinkedList<Type>  () {}
@@ -187,7 +187,6 @@ public:
         return Iterator(pos.node_->next_node);
     }
    
- 
     SingleLinkedList(std::initializer_list<Type> values) {
         if(values.size() != 0){
             auto iter = cbefore_begin();
@@ -202,12 +201,11 @@ public:
         if (!other.IsEmpty()){
             auto iter = cbefore_begin();           
             for (auto it = other.begin(); it != other.end(); ++it){
-                  InsertAfter(iter, *it);
-                  ++iter;
+                    InsertAfter(iter, *it);
+                    ++iter;
                 }
             }
     }
- 
  
     SingleLinkedList& operator=(const SingleLinkedList& rhs) {
         if(this != &rhs){
@@ -223,8 +221,8 @@ public:
     }
  
     ~ SingleLinkedList(){
-       Clear();
-    }
+        Clear();
+    }   
  
 private:
     Node head_;
@@ -248,18 +246,12 @@ bool operator!=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>&
  
 template <typename Type>
 bool operator<(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-   if (lexicographical_compare(lhs.cbegin(),lhs.cend(),rhs.cbegin(),rhs.cend())){
-    return true;
-    }
-    return false;
+    return lexicographical_compare(lhs.cbegin(),lhs.cend(),rhs.cbegin(),rhs.cend());
 }
  
 template <typename Type>
 bool operator<=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    if (rhs < lhs){
-    return false;
-    }
-    return true;
+    return !(rhs < lhs);
 }
  
 template <typename Type>
@@ -269,8 +261,5 @@ bool operator>(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& 
  
 template <typename Type>
 bool operator>=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    if (rhs > lhs){
-    return false;
-    }
-    return true;
-} 
+    return !(rhs > lhs);
+}
